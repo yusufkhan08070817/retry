@@ -13,7 +13,7 @@ const wss = new WebSocket.Server({ server, path: '/websocket' });
 
 // Initialize a counter for connected clients
 let connectedClients = [];
-
+//https://retry-2s8c.onrender.com/websocket
 // Set up an event handler for when a client connects
 wss.on("connection", (ws, req) => {
   console.log("Client connected");
@@ -41,5 +41,5 @@ server.listen(port, () => {
 
 // Print the total number of connected clients every 5 seconds
 setInterval(() => {
-  console.log(`Total clients connected: ${clientCount}`);
+  console.log(`Total clients connected: ${connectedClients}`);
 }, 5000);
