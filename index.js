@@ -12,26 +12,26 @@ const server = http.createServer((req, res) => {
 const wss = new WebSocket.Server({ server, path: '/websocket' });
 
 // Initialize a counter for connected clients
-let clientCount = 0;
+let connectedClients = [];
 
 // Set up an event handler for when a client connects
-wss.on('connection', (ws) => {
-  // Increment the client count
-  clientCount++;
+wss.on("connection", (ws, req) => {
+  console.log("Client connected");
 
-  // Send a welcome message to the client
-  ws.send('Hi! Welcome to the WebSocket server.');
+  connectedClients.push(ws);
 
-  // Set up an event handler for when a message is received from the client
-  ws.on('message', (message) => {
-    console.log(`Received message from client: ${message}`);
+  ws.on("message", (data) => {
+    connectedClients.forEach((ws, i) => {
+      if (ws.readyState === WebSocket.OPEN)
+       {
+        ws.send(data);
+      } else 
+      {
+        connectedClients.splice(i, 1);
+      }
+    });
   });
-
-  // Set up an event handler for when a client disconnects
-  ws.on('close', () => {
-    // Decrement the client count
-    clientCount--;
-  });
+  
 });
 
 // Start the HTTP server on port 3000
